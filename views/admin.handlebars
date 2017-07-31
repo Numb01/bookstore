@@ -1,0 +1,543 @@
+<div id="popAdd" class="span12 btn-icon-pg" style="width: 160px;">
+    <ul style="margin-left: -20px;" ">
+    <li><i class="icon-plus "></i>Add new user</li>
+  </ul>
+</div>
+<div class="widget-box ">
+  <div class="widget-title ">
+    <span class="icon"><i class="icon-th "></i></span> 
+    <h5>Danh sách admin</h5>
+  </div>
+  <script id="document-template" type="text/x-handlebars-template ">
+    <script>
+
+    </script>
+    <div class="widget-content nopadding ">
+      <table class="table table-bordered data-table ">
+        <thead>
+          <tr>
+            <th>Stt</th>
+            <th>User name</th>
+            <th>Full Name</th>
+            <th>Role</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="adminTableBody">
+          {{#if data}}
+          {{{data}}}
+          {{/if}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div id="frmAdd" style="margin: 0 auto; position: fixed; top: 100px; display: none; left: 20%; overflow: auto; z-index: 999; width: 60% ">
+    <div class="widget-box ">
+      <div class="widget-content nopadding ">
+        <form class="form-horizontal " method="post " action="/admin/add " name="basic_validate " id="basic_validate " novalidate="novalidate ">
+          <div class="control-group ">
+            <label class="control-label ">User name</label>
+            <div class="controls ">
+              <input type="text " name="username " id="username" required="Username is not empty! " style="width: 200px; ">
+              <span id="errUsername" style="color: red; margin-left: 20px; "></span>
+            </div>
+          </div>
+          <div class="control-group ">
+            <label class="control-label ">Password</label>
+            <div class="controls ">
+              <input type="password" name="pass " id="pass" required="Password is not empty! " style="width: 200px; ">
+              <span id="errPass" style="color: red; margin-left: 20px; "></span>
+            </div>
+          </div>
+          <div class="control-group ">
+            <label class="control-label ">Full name</label>
+            <div class="controls ">
+              <input type="text " name="fullname" id="fullname" required="Fullname is not empty! " style="width: 200px; ">
+              <span id="errFullname" style="color: red; margin-left: 20px; "></span>
+            </div>
+          </div>
+          <div class="control-group ">
+            <label class="control-label ">Role</label>
+            <div class="controls ">
+              <select id="role" name="role" style="width: 200px; ">
+                {{#if roles}}
+                {{#each roles}}
+                {{options this.roleId this.roleName}}
+                {{/each}}
+                {{/if}}
+              </select>
+            </div>
+          </div>
+          <div class="form-actions ">
+            <input id="add" type="button" value="Add " class="btn btn-success " style="width: 100px; margin-left: 20px; ">
+            <input id="cancel" type="button" value="Cancel " class="btn btn-success " style="width: 100px; margin-left: 10px; ">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="frmEdit" style="margin: 0 auto; position: fixed; top: 100px; display: none; left: 20%; overflow: auto; z-index: 999; width: 60% ">
+    <div class="widget-box ">
+      <div class="widget-content nopadding ">
+        <form class="form-horizontal " method="post " action="/admin/edit " name="basic_validate " id="basic_validate " novalidate="novalidate ">
+          <input type="hidden" id="passOld"/> 
+          <input type="hidden" id="userId"/> 
+          <div class="control-group ">
+            <label class="control-label ">User name</label>
+            <div class="controls ">
+              <input type="text " name="usernameEdit " id="usernameEdit" required="Username is not empty! " style="width: 200px; ">
+              <span id="errUsername" style="color: red; margin-left: 20px; "></span>
+            </div>
+          </div>
+          <div class="control-group ">
+            <label class="control-label ">Password</label>
+            <div class="controls ">
+              <input type="password" name="passEdit" id="passEdit" required="Password is not empty! " style="width: 200px; ">
+              <span id="errPass" style="color: red; margin-left: 20px; "></span>
+            </div>
+          </div>
+          <div class="control-group ">
+            <label class="control-label ">Full name</label>
+            <div class="controls ">
+              <input type="text " name="fullnameEdit" id="fullnameEdit" required="Fullname is not empty! " style="width: 200px; ">
+              <span id="errFullname" style="color: red; margin-left: 20px; "></span>
+            </div>
+          </div>
+          <div class="control-group ">
+            <label class="control-label ">Role</label>
+            <div class="controls ">
+              <div id="selectRole">
+                
+              </div>
+            </div>
+          </div>
+          <div class="form-actions ">
+            <input id="edit" type="button " value="Edit " class="btn btn-success " style="width: 100px; margin-left: 20px; ">
+            <input id="cancelEdit" type="button " value="Cancel " class="btn btn-success " style="width: 100px; margin-left: 10px; ">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="messageAlert" class="widget-box " style="margin: 0 auto; position: fixed; top: 20px; display: none; right: 5%; overflow: auto; z-index: 999; width: 20%; ">
+    <div id="message" class="widget-title " style="text-align: center; font-size: 20px; line-height: 30px; ">
+      aaaaa
+    </div>
+  </div>
+
+  <div id="deleteConfirm" class="form-actions" style="margin: 0 auto; position: fixed; top: 30%; display: none;right: 33%; overflow: auto; z-index: 999; width: 30%; background: lavender">
+    <div style="text-align: center; line-height: 30px; width: 100%;">
+      <i class="icon-warning-sign"></i>&nbsp;&nbsp;&nbsp;&nbsp;Are you sure to delete this account?
+    </div><br/>
+    <div style="width: 80%; margin-left: 10%;">
+      <button  id="deleteConfirmYes"  tabindex="1" type="button " value="Yes" class="btn btn-success " style="width: 30%; margin-left: 10%; ">Yes</button>
+      <button  id="cancelDelete" type="button " value="No" class="btn btn-success " style="width: 30%; margin-left: 10px; ">No</button>
+    </div>
+    </div>
+  <script type="text/javascript">
+    $(document).ready(function() {
+    
+    //function click show popup
+    $("#popAdd").click(function() {
+        console.log("--- clicked");
+        $("#frmAdd").fadeIn(200);
+    });
+
+    $("#cancel").click(function() {
+        $("#frmAdd").fadeOut(200);
+    });
+
+    $("#cancelEdit").click(function() {
+        $("#frmEdit").fadeOut(200);
+    });
+
+    //ajax function add user
+    $("#add").click(function() {
+        addAdmin();
+    });
+
+    //ajax function edit user
+    $("#edit").click(function() {
+        var passOld =  $('#passOld').val();
+        editAdmin(passOld);
+    });
+
+    function addAdmin() {
+        var username = $('#username').val();
+        var pass = $('#pass').val();
+        var fullname = $('#fullname').val();
+        var role = $('#role').val();
+
+        if (username === "" && pass === "" && fullname === "") {
+            $('#errUsername').html("Username is not empty!");
+            $('#errPass').html("Pass is not empty!");
+            $('#errFullname').html("Fullname is not empty!");
+        } else {
+            $('#errUsername').html("");
+            $('#errPass').html("");
+            $('#errFullname').html("");
+            $.ajax({
+                url: "/admin/add",
+                type: "post",
+                dataType: "text",
+                data: {
+                    username: username,
+                    pass: pass,
+                    fullname: fullname,
+                    role: role,
+                },
+                success: function(result) {
+                    var objJson = JSON.parse(result);
+
+                    console.log(objJson);
+                    console.log(objJson["desc"]);
+                    if (objJson["desc"] !== "" && typeof objJson["desc"] !== "undefined") {
+                        $("#frmAdd").fadeOut(200);
+                        $('#message').html(objJson["desc"]);
+                        $("#messageAlert").fadeIn(200);
+                        setTimeout(function() {
+                            $('#messageAlert').fadeOut(200);
+                        }, 2000);
+                    } else {
+                        var stringHtml = "";
+                        for (var i = 0; i < objJson["user"].length; i++) {
+                            stringHtml += "<tr class=\"gradeX\">";
+
+                            stringHtml += "<td>" + (i + 1) + "</td>";
+                            stringHtml += "<td>" + objJson["user"][i].userName + "</td>";
+                            stringHtml += "<td>" + objJson["user"][i].fullName + "</td>";
+                            stringHtml += "<td>" + objJson["user"][i].roleName + "</td>";
+
+                            stringHtml += "<td>";
+
+                            console.log(objJson["userLogin"].role);
+
+                            if (objJson["user"][i].role > objJson["userLogin"].role) {
+                                stringHtml += "<i class=\"icon-edit\" style=\"margin-left: 10px;\" title=\"Edit\" value=\"" + objJson["user"][i].id + "\"></i>";
+
+                            }
+                            if (objJson["user"][i].role != objJson["userLogin"].role) {
+                                stringHtml += "<i class=\"icon-remove\" style=\"margin-left: 10px;\" title=\"Delete\" value=\"" + objJson["user"][i].id + "\"></i>";
+                            }
+                            stringHtml += "</td>";
+
+                            stringHtml += "</tr>";
+                            $('#adminTableBody').html("");
+                            $('#adminTableBody').html(stringHtml);
+                            $("#frmAdd").fadeOut(200);
+                            $('#message').html("Successfull");
+                            $("#messageAlert").fadeIn(200);
+                            setTimeout(function() {
+                                $('#messageAlert').fadeOut(200);
+                            }, 2000);
+
+                        }
+                    }
+                },
+                error: function() {
+                    $("#frmAdd").fadeOut(200);
+                    $('#message').html("Failded");
+                    $("#messageAlert").fadeIn(200);
+                    $("#messageAlert").delay(2000).fadeOut(200);
+                }
+            });
+        }
+    }
+
+    function editAdmin(passOld) {
+        var username = $('#usernameEdit').val();
+        var pass = $('#passEdit').val();
+        var fullname = $('#fullnameEdit').val();
+        var role = $('#selectRoleEdit').val();
+        var userId = $('#userId').val();
+
+        if (username === "" && pass === "" && fullname === "") {
+            $('#errUsernameEdit').html("Username is not empty!");
+            $('#errPassEdit').html("Pass is not empty!");
+            $('#errFullnameEdit').html("Fullname is not empty!");
+        } else {
+            $('#errUsernameEdit').html("");
+            $('#errPassEdit').html("");
+            $('#errFullnameEdit').html("");
+            $.ajax({
+                url: "/admin/edit",
+                type: "post",
+                dataType: "text",
+                data: {
+                    userId: userId,
+                    username: username,
+                    pass: pass,
+                    fullname: fullname,
+                    role: role,
+                    passOld: passOld,
+                },
+                success: function(result) {
+                    var objJson = JSON.parse(result);
+
+                    console.log(objJson);
+                    console.log(objJson["desc"]);
+                    if (objJson["desc"] !== "" && typeof objJson["desc"] !== "undefined") {
+                        $("#frmEdit").fadeOut(200);
+                        $('#message').html(objJson["desc"]);
+                        $("#messageAlert").fadeIn(200);
+                        setTimeout(function() {
+                            $('#messageAlert').fadeOut(200);
+                        }, 2000);
+                    } else {
+                        var stringHtml = "";
+                        for (var i = 0; i < objJson["user"].length; i++) {
+                            stringHtml += "<tr class=\"gradeX\">";
+
+                            stringHtml += "<td>" + (i + 1) + "</td>";
+                            stringHtml += "<td>" + objJson["user"][i].userName + "</td>";
+                            stringHtml += "<td>" + objJson["user"][i].fullName + "</td>";
+                            stringHtml += "<td>" + objJson["user"][i].roleName + "</td>";
+
+                            stringHtml += "<td>";
+
+                            console.log(objJson["userLogin"].role);
+
+                            if (objJson["user"][i].role > objJson["userLogin"].role) {
+                                stringHtml += "<i class=\"icon-edit\" style=\"margin-left: 10px;\" title=\"Edit\" value=\"" + objJson["user"][i].id + "\"></i>";
+
+                            }
+                            if (objJson["user"][i].role != objJson["userLogin"].role) {
+                                stringHtml += "<i class=\"icon-remove\" style=\"margin-left: 10px;\" title=\"Delete\" value=\"" + objJson["user"][i].id + "\"></i>";
+                            }
+                            stringHtml += "</td>";
+
+                            stringHtml += "</tr>";
+                            $('#adminTableBody').html("");
+                            $('#adminTableBody').html(stringHtml);
+                            $("#frmEdit").fadeOut(200);
+                            $('#message').html("Successfull");
+                            $("#messageAlert").fadeIn(200);
+                            setTimeout(function() {
+                                $('#messageAlert').fadeOut(200);
+                            }, 2000);
+
+                        }
+                    }
+                },
+                error: function() {
+                    $("#frmEdit").fadeOut(200);
+                    $('#message').html("Failded");
+                    $("#messageAlert").fadeIn(200);
+                    $("#messageAlert").delay(2000).fadeOut(200);
+                }
+            });
+        }
+    }
+
+    //function click of edit, delete after ajax push
+    $("#adminTableBody").on("click", ".icon-edit", function() {
+        var id = $(this).attr("value");
+        console.log("=======> id: " + id);
+        $.ajax({
+            url: "/admin/get-user",
+            type: "post",
+            dataType: "text",
+            data: {
+                id: id,
+            },
+            success: function(result) {
+                var objJson = JSON.parse(result);
+
+                console.log(objJson);
+                console.log(objJson["desc"]);
+                if (objJson["desc"] !== "" && typeof objJson["desc"] !== "undefined") {
+                    $("#frmAdd").fadeOut(200);
+                    $('#message').html(objJson["desc"]);
+                    $("#messageAlert").fadeIn(200);
+                    setTimeout(function() {
+                        $('#messageAlert').fadeOut(200);
+                    }, 2000);
+                } else {
+                  // console.log(objJson.userName);
+                    $('#usernameEdit').val(objJson["user"]["userName"]);
+                    $('#passEdit').val(objJson["user"]["pass"]);
+                    $('#fullnameEdit').val(objJson["user"]["fullName"]);
+                    var roleId = objJson["user"]["roleId"];
+                    console.log(typeof roleId);
+                    console.log(objJson["roles"]["roleId"]);
+                    console.log(objJson["roles"]["roleName"]);
+                    var select = "<select id=\"selectRoleEdit\" style=\"width: 200px;\">";
+                    for(var i =0; i< objJson["roles"].length; i++){
+                      if(objJson["roles"][i].roleId == roleId){
+                        select += "<option value=\""+objJson["roles"][i].roleId+"\" selected = \"selected\">"+objJson["roles"][i].roleName+"</option>";
+                      }else{
+                        select += "<option value=\""+objJson["roles"][i].roleId+"\">"+objJson["roles"][i].roleName+"</option>";
+                      }
+                    }
+                    select += "</select>";
+
+
+                    // console.log(option);
+                    // var source = $("#roleEdit-template").html();
+                    // var template = Handlebars.compile(source);
+
+                    // console.log(template);
+                    // console.log(template(select));
+                    $('#selectRole').html(select);
+                    $('#passOld').attr("value", objJson["user"]["pass"]);
+                    $('#userId').attr("value", id);
+                    $("#frmEdit").fadeIn(200);
+                }
+            },
+            error: function() {
+                $("#frmAdd").fadeOut(200);
+                $('#message').html("Failded");
+                $("#messageAlert").fadeIn(200);
+                $("#messageAlert").delay(2000).fadeOut(200);
+            }
+        });
+    });
+
+    $("#adminTableBody").on("click", ".icon-remove", function() {
+        $("#deleteConfirm").fadeIn(200);
+        var id = $(this).attr("value");
+        $("#deleteConfirmYes").attr("userId", id);
+    });
+
+    $("#cancelDelete").click(function() {
+        $("#deleteConfirm").fadeOut(200);
+    });
+
+    $("#deleteConfirmYes").click(function() {
+        var id = $(this).attr("userId");
+        console.log("=======> id: " + id);
+
+        $.ajax({
+            url: "/admin/delete",
+            type: "post",
+            dataType: "text",
+            data: {
+                id: id,
+            },
+            success: function(result) {
+                var objJson = JSON.parse(result);
+
+                console.log(objJson);
+                console.log(objJson["desc"]);
+                if (objJson["desc"] !== "" && typeof objJson["desc"] !== "undefined") {
+                    $("#frmAdd").fadeOut(200);
+                    $('#message').html(objJson["desc"]);
+                    $("#messageAlert").fadeIn(200);
+                    setTimeout(function() {
+                        $('#messageAlert').fadeOut(200);
+                    }, 2000);
+                } else {
+                    var stringHtml = "";
+                    for (var i = 0; i < objJson["user"].length; i++) {
+                        stringHtml += "<tr class=\"gradeX\">";
+
+                        stringHtml += "<td>" + (i + 1) + "</td>";
+                        stringHtml += "<td>" + objJson["user"][i].userName + "</td>";
+                        stringHtml += "<td>" + objJson["user"][i].fullName + "</td>";
+                        stringHtml += "<td>" + objJson["user"][i].roleName + "</td>";
+
+                        stringHtml += "<td>";
+
+                        console.log(objJson["userLogin"].role);
+
+                        if (objJson["user"][i].role > objJson["userLogin"].role) {
+                            stringHtml += "<i class=\"icon-edit\" style=\"margin-left: 10px;\" title=\"Edit\" value=\"" + objJson["user"][i].id + "\"></i>";
+
+                        }
+                        if (objJson["user"][i].role != objJson["userLogin"].role) {
+                            stringHtml += "<i class=\"icon-remove\" style=\"margin-left: 10px;\" title=\"Delete\" value=\"" + objJson["user"][i].id + "\"></i>";
+                        }
+                        stringHtml += "</td>";
+
+                        stringHtml += "</tr>";
+                        $('#adminTableBody').html("");
+                        $('#adminTableBody').html(stringHtml);
+                        $("#frmAdd").fadeOut(200);
+                        $('#message').html("Successfull");
+                        $("#messageAlert").fadeIn(200);
+                        setTimeout(function() {
+                            $('#messageAlert').fadeOut(200);
+                        }, 2000);
+
+                    }
+                }
+            },
+            error: function() {
+                $("#frmAdd").fadeOut(200);
+                $('#message').html("Failded");
+                $("#messageAlert").fadeIn(200);
+                $("#messageAlert").delay(2000).fadeOut(200);
+            }
+
+        });
+        $("#deleteConfirm").fadeOut(200);
+        $("#deleteConfirmYes").removeAttr("userId");
+    });
+
+    $('#deleteConfirmYes').on('keypress', function(e) {
+       alert('hello');
+    });
+
+    $(document).keypress(function(e) {
+      if(e.which == 13) {
+        if ($('#deleteConfirm').css('display') == 'none') {
+          //$('#deleteConfirmYes').click();
+        }else{
+          $('#deleteConfirmYes').click();
+        }
+      }
+    });
+
+     $("#adminTableBody").on("click", ".icon-refresh", function() {
+        var id = $(this).attr("value");
+        console.log("=======> id: " + id);
+        $.ajax({
+            url: "/admin/reset-pass",
+            type: "post",
+            dataType: "text",
+            data: {
+                id: id,
+            },
+            success: function(result) {
+                var objJson = JSON.parse(result);
+
+                console.log(objJson);
+                console.log(objJson["desc"]);
+                if (objJson["desc"] !== "" && typeof objJson["desc"] !== "undefined") {
+                    $("#frmAdd").fadeOut(200);
+                    $('#message').html(objJson["desc"]);
+                    $("#messageAlert").fadeIn(200);
+                    setTimeout(function() {
+                        $('#messageAlert').fadeOut(200);
+                    }, 2000);
+                } else {
+                  // console.log(objJson.userName);
+                    $('#message').html("Successfull");
+                        $("#messageAlert").fadeIn(200);
+                        setTimeout(function() {
+                            $('#messageAlert').fadeOut(200);
+                        }, 2000);
+                }
+            },
+            error: function() {
+                $("#frmAdd").fadeOut(200);
+                $('#message').html("Failded");
+                $("#messageAlert").fadeIn(200);
+                $("#messageAlert").delay(2000).fadeOut(200);
+            }
+        });
+     });
+
+    // function check(e) {
+    //     var code = e.keyCode;
+
+    //         console.log("---");
+    //     if (code === 13) {
+    //         //$("#deleteConfirmYes").click();
+    //         console.log(code);
+    //     }
+    // }
+});
+</script>

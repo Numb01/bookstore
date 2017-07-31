@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Book Admin</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/css/bootstrap-responsive.min.css" />
+	<link rel="stylesheet" href="/css/fullcalendar.css" />
+	<link rel="stylesheet" href="/css/maruti-style.css" />
+	<link rel="stylesheet" href="/css/maruti-media.css" class="skin-color" />
+	<link rel="stylesheet" href="/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/css/bootstrap-responsive.min.css" />
+	<link rel="stylesheet" href="/css/uniform.css" />
+	<link rel="stylesheet" href="/css/select2.css" />
+	<link rel="stylesheet" href="/css/maruti-style.css" />
+	<link rel="stylesheet" href="/css/maruti-media.css" class="skin-color" />
+	<script src="js/handlebars.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/maruti.js"></script>
+	<script src="js/jquery.ui.custom.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="/js/jquery.uniform.js"></script> 
+	<script src="/js/select2.min.js"></script> 
+	<script src="/js/jquery.dataTables.min.js"></script> 
+	<script src="/js/maruti.tables.js"></script>
+</head>
+<body>
+
+	<!--Header-part-->
+	<div id="header">
+		<h1><a href="/">Book Admin</a></h1>
+	</div>
+	<!--close-Header-part--> 
+
+	<!--top-Header-messaages-->
+	<div class="btn-group rightzero"> <a class="top_message tip-left" title="Manage Files"><i class="icon-file"></i></a> <a class="top_message tip-bottom" title="Manage Users"><i class="icon-user"></i></a> <a class="top_message tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a> <a class="top_message tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a> </div>
+	<!--close-top-Header-messaages--> 
+
+	<!--top-Header-menu-->
+	<div id="user-nav" class="navbar navbar-inverse">
+		<ul class="nav">
+			<li class="" ><a title="" href="#"><i class="icon icon-user"></i> <span class="text">Xin chào {{user.username}}</span></a></li>
+			<li class="" ><a title="" href="#"><i class="icon icon-user"></i> <span class="text">Profile</span></a></li>
+			<li class=""><a title="" href="/logout"><i class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
+		</ul>
+	</div>
+	<div id="search">
+		<input type="text" placeholder="Search here..."/>
+		<button type="submit" class="tip-left" title="Search"><i class="icon-search icon-white"></i></button>
+	</div>
+	<!--close-top-Header-menu-->
+
+	<div id="sidebar">
+		<a href="#" class="visible-phone"><i class="icon icon-home"></i>Menu</a><ul>
+		<li class="active"><a href="/"><i class="icon icon-home"></i> <span>Home</span></a> </li>
+
+		{{#compare user.role "<=" 1}}
+		<li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Quản lý hệ thống</span> </a>
+			<ul>
+				<li><a href="/admin">Quản lý admin</a></li>
+				<li><a href="/role">Quản lý role</a></li>
+			</ul>
+		</li>
+		{{/compare}}
+
+		<li> <a href="/book"><i class="icon icon-inbox"></i> <span>Quản lý sách</span></a> </li>
+
+	</ul>
+</div>
+<div id="content">
+	<div id="content-header">
+		<div id="breadcrumb"> <a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a></div>
+	</div>
+	<div class="container-fluid">
+		{{{body}}}
+	</div>
+</div>
+</body>
+</html>
