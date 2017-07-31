@@ -18,8 +18,8 @@
 -- Create schema `nodejs-test`
 --
 
-CREATE DATABASE IF NOT EXISTS `u700939561_books`;
-USE `u700939561_books`;
+CREATE DATABASE IF NOT EXISTS `sql12187903`;
+USE `sql12187903`;
 
 --
 -- Definition of table `role`
